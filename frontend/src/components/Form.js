@@ -10,6 +10,7 @@ const Form = () => {
   const [price, setPrice] = useState('');
   const [timeSpent, setTimeSpent] = useState(false);
   const [notification, setNotification] = useState('');
+  const [notificationType, setNotificationType] = useState('');
 
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -20,6 +21,8 @@ const Form = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setNotification('');
+    setNotificationType('');
 
     const formData = {
       name,
@@ -31,17 +34,24 @@ const Form = () => {
 
     try {
       const response = await submitForm(formData);
-      setNotification('Form submitted successfully!');
+      if (response.status === 'success') {
+        setNotification('Form submitted successfully!');
+        setNotificationType('success');
+      } else {
+        setNotification('Failed to submit form.');
+        setNotificationType('error');
+      }
       console.log(response);
     } catch (error) {
       setNotification('Failed to submit form.');
+      setNotificationType('error');
       console.error(error.message);
     }
   };
 
   return (
     <div className="form-container">
-      {notification && <Notification message={notification} onClose={() => setNotification('')} />}
+      {notification && <Notification message={notification} onClose={() => setNotification('')} type={notificationType} />}
       <h1>Submit a Deal</h1>
       <form onSubmit={handleSubmit} className="form">
         <input 
