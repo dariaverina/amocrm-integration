@@ -1,16 +1,11 @@
-FROM php:7.4-apache
+FROM php:8.1-apache
 
-RUN apt-get update && apt-get install -y libzip-dev unzip \
-    && docker-php-ext-install zip
-
-COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
+RUN docker-php-ext-install mysqli pdo pdo_mysql
 
 COPY . /var/www/html/
 
-RUN composer install --no-dev
+WORKDIR /var/www/html/
 
-RUN chown -R www-data:www-data /var/www/html
+ENV ENV_PATH=/var/www/html/.env
 
-WORKDIR /var/www/html
-
-EXPOSE 80
+CMD ["apache2-foreground"]

@@ -1,4 +1,4 @@
-version: '3.7'
+version: '3.8'
 
 services:
   backend:
@@ -6,17 +6,11 @@ services:
       context: ./backend
       dockerfile: Dockerfile
     ports:
-      - "8080:80"
-    volumes:
-      - ./backend:/var/www/html
-    environment:
-      - CLIENT_ID=${CLIENT_ID}
-      - CLIENT_SECRET=${CLIENT_SECRET}
-      - REDIRECT_URI=${REDIRECT_URI}
-      - SUBDOMAIN=${SUBDOMAIN}
-      - ACCESS_TOKEN=${ACCESS_TOKEN}
-      - REFRESH_TOKEN=${REFRESH_TOKEN}
-      - BASE_DOMAIN=${BASE_DOMAIN}
+      - "8000:80"
+    env_file:
+      - ./backend/.env
+    networks:
+      - app-network
 
   frontend:
     build:
@@ -24,7 +18,13 @@ services:
       dockerfile: Dockerfile
     ports:
       - "3000:3000"
-    volumes:
-      - ./frontend:/app
-    environment:
-      - REACT_APP_API_BASE_URL=${REACT_APP_API_BASE_URL}
+    env_file:
+      - ./frontend/.env
+    depends_on:
+      - backend
+    networks:
+      - app-network
+
+networks:
+  app-network:
+    driver: bridge
