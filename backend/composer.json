@@ -1,0 +1,13 @@
+{
+    "name": "daria/backend",
+    "description": "backend for amocrm integration app",
+    "type": "project",
+    "license": "proprietary",
+    "authors": [
+        {
+            "name": "daria verina"
+        }
+    ],
+    "minimum-stability": "stable",
+    "require": {}
+}
